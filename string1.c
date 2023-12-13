@@ -1,13 +1,13 @@
-#include "custom_shell.h"
+#include "shell.h"
 
 /**
- * custom_strcpy - copies a string
+ * _strcpy - copies a string
  * @dest: the destination
  * @src: the source
  *
  * Return: pointer to destination
  */
-char *custom_strcpy(char *dest, char *src)
+char *_strcpy(char *dest, char *src)
 {
 	int i = 0;
 
@@ -23,12 +23,12 @@ char *custom_strcpy(char *dest, char *src)
 }
 
 /**
- * custom_strdup - duplicates a string
+ * _strdup - duplicates a string
  * @str: the string to duplicate
  *
  * Return: pointer to the duplicated string
  */
-char *custom_strdup(const char *str)
+char *_strdup(const char *str)
 {
 	int length = 0;
 	char *ret;
@@ -37,7 +37,7 @@ char *custom_strdup(const char *str)
 		return (NULL);
 	while (*str++)
 		length++;
-	ret = custom_malloc(sizeof(char) * (length + 1));
+	ret = malloc(sizeof(char) * (length + 1));
 	if (!ret)
 		return (NULL);
 	for (length++; length--;)
@@ -46,12 +46,12 @@ char *custom_strdup(const char *str)
 }
 
 /**
- * custom_puts - prints an input string
- * @str: the string to be printed
+ *_puts - prints an input string
+ *@str: the string to be printed
  *
  * Return: Nothing
  */
-void custom_puts(char *str)
+void _puts(char *str)
 {
 	int i = 0;
 
@@ -59,19 +59,19 @@ void custom_puts(char *str)
 		return;
 	while (str[i] != '\0')
 	{
-		custom_putchar(str[i]);
+		_putchar(str[i]);
 		i++;
 	}
 }
 
 /**
- * custom_putchar - writes the character c to stdout
+ * _putchar - writes the character c to stdout
  * @c: The character to print
  *
  * Return: On success 1.
  * On error, -1 is returned, and errno is set appropriately.
  */
-int custom_putchar(char c)
+int _putchar(char c)
 {
 	static int i;
 	static char buf[WRITE_BUF_SIZE];

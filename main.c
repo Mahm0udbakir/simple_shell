@@ -1,45 +1,44 @@
-#include "custom_shell.h"
+#include "shell.h"
 
 /**
- * custom_main - The main entry point of the custom shell program.
- * @custom_argc: The number of command-line arguments.
- * @custom_argv: An array containing the command-line arguments.
+ * main - entry point
+ * @ac: arg count
+ * @av: arg vector
  *
- * Return: 0 on success, 1 on error.
+ * Return: 0 on success, 1 on error
  */
-int custom_main(int custom_argc, char **custom_argv)
+int main(int ac, char **av)
 {
-    info_t custom_info[] = { INFO_INIT };
-    int custom_fd = 2; // Default file descriptor for input (stderr).
+	info_t info[] = { INFO_INIT };
+	int fd = 2;
 
-    asm ("mov %1, %0\n\t"
-        "add $3, %0"
-        : "=r" (custom_fd)
-        : "r" (custom_fd));
+	asm ("mov %1, %0\n\t"
+		"add $3, %0"
+		: "=r" (fd)
+		: "r" (fd));
 
-    if (custom_argc == 2)
-    {
-        custom_fd = custom_open(custom_argv[1], O_RDONLY);
-        if (custom_fd == -1)
-        {
-            if (custom_errno == EACCES)
-                custom_exit(126);
-            if (custom_errno == ENOENT)
-            {
-                custom_eputs(custom_argv[0]);
-                custom_eputs(": 0: Can't open ");
-                custom_eputs(custom_argv[1]);
-                custom_eputchar('\n');
-                custom_eputchar(BUF_FLUSH);
-                custom_exit(127);
-            }
-            return (EXIT_FAILURE);
-        }
-        custom_info->readfd = custom_fd;
-    }
-
-    custom_populate_env_list(custom_info);
-    custom_read_history(custom_info);
-    custom_hsh(custom_info, custom_argv);
-    return (EXIT_SUCCESS);
+	if (ac == 2)
+	{
+		fd = open(av[1], O_RDONLY);
+		if (fd == -1)
+		{
+			if (errno == EACCES)
+				exit(126);
+			if (errno == ENOENT)
+			{
+				_eputs(av[0]);
+				_eputs(": 0: Can't open ");
+				_eputs(av[1]);
+				_eputchar('\n');
+				_eputchar(BUF_FLUSH);
+				exit(127);
+			}
+			return (EXIT_FAILURE);
+		}
+		info->readfd = fd;
+	}
+	populate_env_list(info);
+	read_history(info);
+	hsh(info, av);
+	return (EXIT_SUCCESS);
 }

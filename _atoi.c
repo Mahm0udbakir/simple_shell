@@ -1,69 +1,74 @@
-#include "custom_shell.h"
+#include "shell.h"
 
 /**
- * check_interactive_mode - determines if the shell is in interactive mode
- * @shell_info: custom structure containing shell information
+ * interactive - returns true if shell is interactive mode
+ * @info: struct address
  *
- * Returns: 1 if the shell is in interactive mode, 0 otherwise
+ * Return: 1 if interactive mode, 0 otherwise
  */
-int check_interactive_mode(shell_info_t *shell_info)
+int interactive(info_t *info)
 {
-    return (isatty(STDIN_FILENO) && shell_info->input_fd <= 2);
+	return (isatty(STDIN_FILENO) && info->readfd <= 2);
 }
 
 /**
- * is_separator - checks if a character is a separator
- * @ch: the character to check
- * @separators: the separator string
+ * is_delim - checks if character is a delimeter
+ * @c: the char to check
+ * @delim: the delimeter string
  * Return: 1 if true, 0 if false
  */
-int is_separator(char ch, char *separators)
+int is_delim(char c, char *delim)
 {
-    while (*separators)
-        if (*separators++ == ch)
-            return (1);
-    return (0);
+	while (*delim)
+		if (*delim++ == c)
+			return (1);
+	return (0);
 }
 
 /**
- * custom_is_alpha - checks for alphabetic character
- * @ch: The character to check
- * Return: 1 if ch is alphabetic, 0 otherwise
+ *_isalpha - checks for alphabetic character
+ *@c: The character to input
+ *Return: 1 if c is alphabetic, 0 otherwise
  */
-int custom_is_alpha(int ch)
+
+int _isalpha(int c)
 {
-    if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))
-        return (1);
-    else
-        return (0);
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+		return (1);
+	else
+		return (0);
 }
 
 /**
- * custom_atoi - converts a string to an integer
- * @str: the string to be converted
- * Return: 0 if no numbers in string, converted number otherwise
+ *_atoi - converts a string to an integer
+ *@s: the string to be converted
+ *Return: 0 if no numbers in string, converted number otherwise
  */
-int custom_atoi(char *str)
+
+int _atoi(char *s)
 {
-    int index, sign = 1, flag = 0, result;
-    unsigned int num_result = 0;
+	int i, sign = 1, flag = 0, output;
+	unsigned int result = 0;
 
-    for (index = 0;  str[index] != '\0' && flag != 2; index++)
-    {
-        if (str[index] == '-')
-            sign *= -1;
+	for (i = 0;  s[i] != '\0' && flag != 2; i++)
+	{
+		if (s[i] == '-')
+			sign *= -1;
 
-        if (str[index] >= '0' && str[index] <= '9')
-        {
-            flag = 1;
-            num_result *= 10;
-            num_result += (str[index] - '0');
-        }
-        else if (flag == 1)
-            flag = 2;
-    }
+		if (s[i] >= '0' && s[i] <= '9')
+		{
+			flag = 1;
+			result *= 10;
+			result += (s[i] - '0');
+		}
+		else if (flag == 1)
+			flag = 2;
+	}
 
-    result = (sign == -1) ? -num_result : num_result;
-    return (result);
+	if (sign == -1)
+		output = -result;
+	else
+		output = result;
+
+	return (output);
 }
-
